@@ -1,3 +1,5 @@
+import naive_solution
+
 T = 1 # number of test cases
 fout = open ("answer.out", "w")
 for t in xrange(1, T+1):
@@ -9,9 +11,9 @@ for t in xrange(1, T+1):
     c = fin.readline()
 
     # find an answer, and put into assign
-    assign = [0] * N
-    for i in xrange(N):
-        assign[i] = i+1
+    
+    assign = naive_solution.solve(d,c,N)
+
 
     fout.write("%s\n" % " ".join(map(str, assign)))
 fout.close()
