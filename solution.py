@@ -1,4 +1,5 @@
 import naive_solution
+import algorithm
 
 T = 1 # number of test cases
 fout = open ("answer.out", "w")
@@ -12,7 +13,7 @@ for t in xrange(1, T+1):
 
     # find an answer, and put into assign
     
-    assign = naive_solution.solve(d,c,N)
+    assign = algorithm.get_approx_path(d,c,N)
 
 
     fout.write("%s\n" % " ".join(map(str, assign)))
