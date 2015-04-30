@@ -1,7 +1,7 @@
 import naive_solution
 import algorithm
 
-T = 1 # number of test cases
+T = 2 # number of test cases
 fout = open ("answer.out", "w")
 for t in xrange(1, T+1):
     fin = open(str(t) + ".in", "r")
