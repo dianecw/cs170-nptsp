@@ -13,7 +13,7 @@ for t in xrange(1, T+1):
 
     # find an answer, and put into assign
     
-    assign = algorithm.get_approx_path(d,c,N)
+    assign = algorithm.construct_path(d,c,N)
 
 
     fout.write("%s\n" % " ".join(map(str, assign)))
