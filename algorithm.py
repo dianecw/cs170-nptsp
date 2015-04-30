@@ -22,7 +22,7 @@ def construct_path(edges, colors, N):
         used_vertices.add(vertex)
         not_used_vertices.remove(vertex)
 
-    return normalize(path, N)
+    return path
 
 
 def randomly_select(N, not_used_vertices):

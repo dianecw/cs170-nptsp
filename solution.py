@@ -1,5 +1,15 @@
 import naive_solution
 import algorithm
+import sanity
+
+def normalize(assign, N):
+    new = [-1] * N
+    for i in range(N):
+        new[i] = assign[i] + 1
+
+    return new
+
+
 
 T = 2 # number of test cases
 fout = open ("answer.out", "w")
@@ -14,7 +24,11 @@ for t in xrange(1, T+1):
     # find an answer, and put into assign
     
     assign = algorithm.construct_path(d,c,N)
+    print assign
+    print "SANITY:" +  str(sanity.sanity_checker(assign, c))
+    print "WEIGHT:" +  str(sanity.weight(assign, d))
 
 
+    assign = normalize(assign, N)
     fout.write("%s\n" % " ".join(map(str, assign)))
 fout.close()

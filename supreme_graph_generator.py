@@ -31,10 +31,10 @@ def generate_graph(n, fileName):
 	num_red = 0
 	num_blue = 0
 	for i in range(n):
-		if num_red > n/2:
+		if num_red >= n/2:
 			file.write('B')
 			continue
-		if num_blue > n/2:
+		if num_blue >= n/2:
 			file.write('R')
 			continue
 		num = random.randint(0, 1)
