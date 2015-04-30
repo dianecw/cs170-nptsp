@@ -25,9 +25,9 @@ for t in xrange(1, T+1):
     
     assign = algorithm.construct_path(d,c,N)
     print assign
-    print "SANITY:" +  str(sanity.sanity_checker(assign, c))
+    print "VALID:" +  str(sanity.is_valid_path(assign, c))
     print "WEIGHT:" +  str(sanity.weight(assign, d))
-
+    print sanity.supreme_brute_generator(d,c,N)
 
     assign = normalize(assign, N)
     fout.write("%s\n" % " ".join(map(str, assign)))
