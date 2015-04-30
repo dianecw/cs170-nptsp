@@ -1,6 +1,6 @@
 import itertools
 
-def is_valid_path(path, colors):
+def is_valid_path(path, colors, print_path = True):
     c = []
     for i in range(len(path)-2):
 
@@ -12,7 +12,8 @@ def is_valid_path(path, colors):
         if color == color2 and color2 == color3:
             c.append(color2)
             c.append(color3)
-            print(c)
+            if print_path:
+                print(c)
             return False 
     return True 
 
@@ -32,7 +33,7 @@ def supreme_brute_generator(edges,colors,N):
         total = 0
         for i in range(len(path)-1):
             total += edges[path[i]][path[i+1]]
-        if total < optimal and is_valid_path(path,colors):
+        if total < optimal and is_valid_path(path,colors, False):
             optimal_path = path
             optimal = total
         try:
