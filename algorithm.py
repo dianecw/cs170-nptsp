@@ -8,18 +8,21 @@ def construct_path(edges, colors, N):
     path = []
 
     # First Vertex
-    vertex = randomly_select(N, used_vertices)
+    vertex = randomly_select(N, not_used_vertices)
     path = [] + [vertex]
     used_vertices.add(vertex)
     not_used_vertices.remove(vertex)
 
     for i in range(1,N):
-        vertex = randomly_select(N, used_vertices)
-        path = insertion(edges, color, N, used_vertices, path, vertex)
+        vertex = randomly_select(N, not_used_vertices)
+        newpath = "FAIL"
+        while newpath == "FAIL":
+            newpath = insertion(edges, colors, N, used_vertices, path, vertex)
+        path = newpath
         used_vertices.add(vertex)
         not_used_vertices.remove(vertex)
 
-    return path
+    return normalize(path, N)
 
 
 def randomly_select(N, not_used_vertices):
@@ -27,58 +30,64 @@ def randomly_select(N, not_used_vertices):
     if num in not_used_vertices:
         return num
     else:
-        return randomly_select(N, used_vertices)
+        return randomly_select(N, not_used_vertices)
+
+
+def color_valid(index, path, colors, my_color):
+
+    after_one = (index > len(path)-1) or (my_color != colors[path[index]])
+    after_two = (index+1 > len(path)-1) or (my_color != colors[path[index+1]])
+    after = after_one or after_two
+
+    before_one = (index-1 < 0) or (my_color != colors[path[index-1]])
+    before_two = (index-2 < 0) or (my_color != colors[path[index-2]])
+    before = before_one or before_two
+
+    between = after_one or before_one
+
+    return after and before and between
+
+
+def edge_difference(index, path, edges, v_edges):
+    if index == 0:
+        return v_edges[path[0]]
+    elif index == len(path):
+        return v_edges[path[len(path)-1]]
+    else:
+        return v_edges[path[index-1]] + v_edges[path[index]] - edges[path[index-1]][path[index]]
+
 
 def insertion(edges, colors, N, used_vertices, path, vertex):
     v_edges = edges[vertex]
+    my_color = colors[vertex]
 
-    min_weight = v_edges[path[0]] #best is inserting at beginning
-    min_position = (None,0)
-    if(v_edges[path[len(path)-1]] < min_weight):
-        min_weight = v_edges[path[len(path)-1]] #best is inserting at end
-        min_position = (len(path)-1,None)
+    min_weight = 500
+    min_position = None
 
-    for i in range(len(path) - 1):
-        if i == 0: #special cases
-            prev1 = colors[path[i]]
-            curr = colors[vertex]
-            post1 = colors[path[i+1]]
-            post2 = colors[path[i+2]]
-            if !(prev1 == curr and curr == post1) and !(curr == post1 and post1 == post2):
-                prev_edges = edges[path[i]]
-                if v_edges[path[i]] + v_edges[path[i+1]] - prev_edges[path[i+2]] < min_weight:
-                    min_weight = v_edges[path[i]] + v_edges[path[i+2]] - prev_edges[path[i+2]]
-                    min_position = (i,i+1)
+    for i in range(len(path)+1):
+        validity = color_valid(i, path, colors, my_color)
+        weight = edge_difference(i, path, edges, v_edges)
+        if validity and weight < min_weight:
+            min_weight = weight
+            min_position = i
 
-        else if i == len(path)-2:
-            prev2 = colors[path[i-1]]
-            prev1 = colors[path[i]]
-            curr = colors[vertex]
-            post1 = colors[path[i+1]]
-            if !(prev2 == prev1 and prev1 == curr) and !(prev1 == curr and curr == post1):
-                prev_edges = edges[path[i]]
-                if v_edges[path[i]] + v_edges[path[i+1]] - prev_edges[path[i+2]] < min_weight:
-                    min_weight = v_edges[path[i]] + v_edges[path[i+2]] - prev_edges[path[i+2]]
-                    min_position = (i,i+1)
-
-        else:
-            prev2 = colors[path[i-1]]
-            prev1 = colors[path[i]]
-            curr = colors[vertex]
-            post1 = colors[path[i+1]]
-            post2 = colors[path[i+2]]
-            if !(prev2 == prev1 and prev1 == curr) and !(prev1 == curr and curr == post1) and !(curr == post1 and post1 == post2): # making sure we don't hit 3
-                prev_edges = edges[path[i]]
-                if v_edges[path[i]] + v_edges[path[i+1]] - prev_edges[path[i+2]] < min_weight:
-                    min_weight = v_edges[path[i]] + v_edges[path[i+2]] - prev_edges[path[i+2]]
-                    min_position = (i,i+1)
-    if min_position[0] == None:
-        path = [vertex] + path
-    else if min_position[1] == None:
-        path = path + [vertex]
+    if min_position == None:
+        return "FAIL"
+    elif min_position == 0:
+        return [vertex] + path
+    elif min_position == len(path):
+        return path + [vertex]
     else:
-        path = path[:min_position[0]+1] + [vertex] + path[min_position[1]:]
-    return path
+        return path[0:i] + [vertex] + path[i:]
+
+
+def normalize(assign, N):
+    new = [-1] * N
+    for i in range(N):
+        new[i] = assign[i] + 1
+
+    return new
+
 
 
 
