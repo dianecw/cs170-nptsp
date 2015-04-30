@@ -45,4 +45,4 @@ def generate_graph(n, fileName):
 			file.write('B')
 			num_blue += 1
 
-generate_graph(10, '2')
+generate_graph(12, '3')
