@@ -66,7 +66,7 @@ def super_kopt(edges, colors, path, k):
     optimal_path = path 
     path = next(permutations)
     while path != None:
-        path = [item for sublist in next(permutations) for item in sublist]
+        path = [item for sublist in path for item in sublist]
         weight = sanity.weight(path,edges)
         if optimal > weight and sanity.is_valid_path(path,colors, False):
             optimal = weight
@@ -91,7 +91,7 @@ def random_kopt(edges, colors, path, k):
     path = next(permutations)
     path_list = []
     while path != None:
-        path = [item for sublist in next(permutations) for item in sublist]
+        path = [item for sublist in path for item in sublist]
         weight = sanity.weight(path,edges)
         if sanity.is_valid_path(path,colors, False):
             path_list = path_list + [path]
@@ -100,8 +100,11 @@ def random_kopt(edges, colors, path, k):
         except StopIteration:
             path = None
 
-    rand = random.randint(0,len(path_list)-1)
-    return path_list[rand]
+    if len(path_list) == 0:
+        return random_kopt(edges, colors, path, k)
+    else:
+        rand = random.randint(0,len(path_list)-1)
+        return path_list[rand]
 
 
 def color_valid(index, path, colors, my_color):
@@ -172,13 +175,13 @@ def lin_kernigan_iteration(path, edges, colors):
         return k_is_four
 
 
-def lin_kernigan_total(path, edges, colors, i=100000):
+def lin_kernigan_total(path, edges, colors, i=10000):
     for _ in range(i):
         path = lin_kernigan_iteration(path, edges, colors)
     return path
 
 
-def supreme_annealing(path, edges, colors, r = 20):
+def supreme_annealing(path, edges, colors, r=20):
 
     best_path = path
     best_score = sanity.weight(path, edges)
