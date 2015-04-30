@@ -14,9 +14,9 @@ def construct_path(edges, colors, N):
     not_used_vertices.remove(vertex)
 
     for i in range(1,N):
-        vertex = randomly_select(N, not_used_vertices)
         newpath = "FAIL"
         while newpath == "FAIL":
+            vertex = randomly_select(N, not_used_vertices)
             newpath = insertion(edges, colors, N, used_vertices, path, vertex)
         path = newpath
         used_vertices.add(vertex)
@@ -61,24 +61,20 @@ def insertion(edges, colors, N, used_vertices, path, vertex):
     v_edges = edges[vertex]
     my_color = colors[vertex]
 
-    min_weight = 500
+    min_weight = float("inf")
     min_position = None
 
     for i in range(len(path)+1):
         validity = color_valid(i, path, colors, my_color)
+        if validity:
+            print str(path) + " " + str(i) + " " + str(vertex)
         weight = edge_difference(i, path, edges, v_edges)
         if validity and weight < min_weight:
             min_weight = weight
             min_position = i
-
     if min_position == None:
         return "FAIL"
-    elif min_position == 0:
-        return [vertex] + path
-    elif min_position == len(path):
-        return path + [vertex]
-    else:
-        return path[0:i] + [vertex] + path[i:]
+    return path[:min_position] + [vertex] + path[min_position:]
 
 
 def normalize(assign, N):
