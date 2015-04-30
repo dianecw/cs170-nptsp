@@ -34,8 +34,10 @@ for t in xrange(1, T+1):
     print("PRE - kopt")
     print assign
     print "WEIGHT:" +  str(sanity.weight(assign, d))
-    for i in range(100000):
-        assign = algorithm.super_kopt(d,c,assign,4)
+
+    if t>3:
+        assign = algorithm.supreme_annealing(assign, d, c)
+
     print("post - kopt")
     print(assign)
     print "VALID:" +  str(sanity.is_valid_path(assign, c))

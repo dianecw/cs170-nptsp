@@ -1,6 +1,7 @@
 import random
 import itertools
 import sanity
+import threading
 
 
 def construct_path(edges, colors, N):
@@ -42,7 +43,7 @@ def supreme_farthest_insertion(edges, non_used_verticies, used_vertices):
     for v in non_used_verticies:
         closest_dist = float('inf')
         for v2 in used_vertices:
-            cur_dist = edge[v][v2]
+            cur_dist = edges[v][v2]
             if closest_dist > cur_dist:
                 closest_dist = cur_dist
         if best_val < closest_dist:
@@ -76,6 +77,31 @@ def super_kopt(edges, colors, path, k):
             path = None
     return optimal_path
 
+
+def random_kopt(edges, colors, path, k):
+    N = len(path)
+    random_edges = sorted(random.sample(range(0, N), k - 1)) + [N]
+    start = 0
+    subpaths = []
+    for i in range(k):
+        subpaths.append(path[start:random_edges[i]])
+        start = random_edges[i]
+    subpaths = list(filter(lambda x :len(x) > 0, subpaths))
+    permutations = itertools.permutations(subpaths)
+    path = next(permutations)
+    path_list = []
+    while path != None:
+        path = [item for sublist in next(permutations) for item in sublist]
+        weight = sanity.weight(path,edges)
+        if sanity.is_valid_path(path,colors, False):
+            path_list = path_list + [path]
+        try:
+            path = next(permutations)
+        except StopIteration:
+            path = None
+
+    rand = random.randint(0,len(path_list)-1)
+    return path_list[rand]
 
 
 def color_valid(index, path, colors, my_color):
@@ -121,9 +147,58 @@ def insertion(edges, colors, N, used_vertices, path, vertex):
     return path[:min_position] + [vertex] + path[min_position:]
 
 
-def normalize(assign, N):
-    new = [-1] * N
-    for i in range(N):
-        new[i] = assign[i] + 1
+def super_kopt_helper(edges, colors, path, i, results):
+    results[i-4] = super_kopt(edges, colors, path, i)
 
-    return new
+
+
+def lin_kernigan_iteration(path, edges, colors):
+    results = [None for _ in range(2)]
+    threads = []
+    for i in range(4,6):
+        t = threading.Thread(target=super_kopt_helper, args=(edges, colors, path, i, results))
+        threads.append(t)
+        t.start()
+
+    for i in range(len(threads)):
+        threads[i].join()
+
+    k_is_four = results[0]
+    k_is_five = results[1]
+
+    if sanity.weight(k_is_five, edges) < sanity.weight(k_is_four, edges):
+        return k_is_five
+    else:
+        return k_is_four
+
+
+def lin_kernigan_total(path, edges, colors, i=100000):
+    for _ in range(i):
+        path = lin_kernigan_iteration(path, edges, colors)
+    return path
+
+
+def supreme_annealing(path, edges, colors, r = 20):
+
+    best_path = path
+    best_score = sanity.weight(path, edges)
+    curr_path = path
+
+    for _ in range(r):
+        curr_path = lin_kernigan_total(curr_path, edges, colors)
+        score = sanity.weight(curr_path, edges)
+        if score < best_score:
+            best_path = curr_path
+            best_score = score
+        curr_path = random_kopt(edges, colors, curr_path, 4)
+
+    return best_path
+
+
+
+
+
+
+
+
+
