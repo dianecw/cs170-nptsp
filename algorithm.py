@@ -66,8 +66,6 @@ def insertion(edges, colors, N, used_vertices, path, vertex):
 
     for i in range(len(path)+1):
         validity = color_valid(i, path, colors, my_color)
-        if validity:
-            print str(path) + " " + str(i) + " " + str(vertex)
         weight = edge_difference(i, path, edges, v_edges)
         if validity and weight < min_weight:
             min_weight = weight
