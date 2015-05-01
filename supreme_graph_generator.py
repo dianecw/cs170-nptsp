@@ -7,7 +7,7 @@ def generate_graph(n, fileName):
 	"""
 	if n % 2 != 0:
 		return
-	file = open(fileName + '.in', 'w+')
+	file = open('./test_cases/' + fileName + '.in', 'w+')
 	file.write(str(n) + '\n')
 	#file.write('hello')
 	edge_matrix = [[0 for x in range(n)] for x in range(n)] 
