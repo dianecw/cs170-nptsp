@@ -46,5 +46,5 @@ def generate_graph(n, fileName):
 			file.write('B')
 			num_blue += 1
 
-for i in range(1,11):
-	generate_graph(50, '50-node-planted' + str(i))
+for i in range(1,51):
+	generate_graph(50, '50-node-' + str(i))
