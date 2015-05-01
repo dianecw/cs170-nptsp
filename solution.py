@@ -11,10 +11,11 @@ def normalize(assign, N):
 
 
 
-T = 4 # number of test cases
+T = 10 # number of test cases
 fout = open ("answer.out", "w")
 for t in xrange(1, T+1):
-    fin = open(str(t) + ".in", "r")
+
+    fin = open("50-node-" + str(t) + ".in", "r")
     N = int(fin.readline())
     d = [[] for i in range(N)]
     for i in xrange(N):
@@ -22,26 +23,22 @@ for t in xrange(1, T+1):
     c = fin.readline()
 
     # find an answer, and put into assign
-    best = None
-    best_val = float('inf')
-    for i in range(10000):
-        assign = algorithm.construct_path(d,c,N)
-        weight = sanity.weight(assign,d) 
-        if sanity.is_valid_path(assign, c) and weight < best_val:
-            best_val = weight
-            best = assign
-    assign = best
-    print("PRE - kopt")
-    print assign
-    print "WEIGHT:" +  str(sanity.weight(assign, d))
 
-    if t>3:
-        assign = algorithm.supreme_annealing(assign, d, c)
 
-    print("post - kopt")
-    print(assign)
+    assign = algorithm.find_good_construction(d, c, N)
+
+    print ("*** TRIAL " + str(t) + " ***")
+    print("Construction")
+    print ("WEIGHT:" +  str(sanity.weight(assign, d)))
+    print
+
+    assign = algorithm.improve(assign, d, c)
+
+    print("Improvement")
     print "VALID:" +  str(sanity.is_valid_path(assign, c))
     print "WEIGHT:" +  str(sanity.weight(assign, d))
+    print
+    print
     #print sanity.supreme_brute_generator(d,c,N)
 
     assign = normalize(assign, N)

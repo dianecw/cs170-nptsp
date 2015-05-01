@@ -17,6 +17,7 @@ def is_valid_path(path, colors, print_path = True):
             return False 
     return True 
 
+
 def weight(path, edges):
     total = 0
     for i in range(len(path)-1):
