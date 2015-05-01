@@ -7,7 +7,7 @@ T = 10 # number of test cases
 fout = open ("answer.out", "w")
 for t in xrange(1, T+1):
 
-    fin = open("50-node-" + str(t) + ".in", "r")
+    fin = open("./test_cases/50-node-" + str(t) + ".in", "r")
     N = int(fin.readline())
     d = [[] for i in range(N)]
     for i in xrange(N):
