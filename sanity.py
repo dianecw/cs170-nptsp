@@ -25,6 +25,14 @@ def weight(path, edges):
     return total
 
 
+def normalize(assign, N):
+    new = [-1] * N
+    for i in range(N):
+        new[i] = assign[i] + 1
+
+    return new
+
+
 def supreme_brute_generator(edges,colors,N):
     permutations = itertools.permutations([i for i in range(N)])
     optimal = float("inf")
