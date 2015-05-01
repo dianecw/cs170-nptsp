@@ -21,7 +21,7 @@ def solve(edges, color, N):
 		assign[i] = min_edge_vertex
 		already_used.add(min_edge_vertex)
 
-	return normalize(assign, N)
+	return assign
 
 
 def normalize(assign, N):

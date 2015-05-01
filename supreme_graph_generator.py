@@ -18,6 +18,8 @@ def generate_graph(n, fileName):
 			num = random.randint(0, 100)
 			edge_matrix[i][j] = num
 			edge_matrix[j][i] = num
+	for i in range(n-1):
+		edge_matrix[i][i+1] = 0
 
 	for i in range(n):
 		for j in range(n):
@@ -45,4 +47,4 @@ def generate_graph(n, fileName):
 			num_blue += 1
 
 for i in range(1,11):
-	generate_graph(50, '50-node-' + str(i))
+	generate_graph(50, '50-node-planted' + str(i))
