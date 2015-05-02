@@ -3,11 +3,11 @@ import algorithm
 import sanity
 
 
-T = 3 # number of test cases
+T = 50 # number of test cases
 fout = open ("answer.out", "w")
 for t in xrange(1, T+1):
 
-    fin = open("./submission_phase1/NPSupreme" + str(t) + ".in", "r")
+    fin = open("./test_cases2/cray" + str(t) + ".in", "r")
     N = int(fin.readline())
     d = [[] for i in range(N)]
     for i in xrange(N):
@@ -27,14 +27,15 @@ for t in xrange(1, T+1):
     path = algorithm.improve(path, d, c)
 
     # print("Improvement")
-    # print "VALID:" +  str(sanity.is_valid_path(path, c))
-    # print "WEIGHT:" +  str(sanity.weight(path, d))
+    print "VALID:" +  str(sanity.is_valid_path(path, c))
+   # print "WEIGHT:" +  str(sanity.weight(path, d))
+    print([d[path[i]][path[i+1]] for i in range(len(path) -1)])
     # print
     # print
     post = sanity.weight(path, d)
     # print
     # print
-    print (float(pre - post) / pre)
+    print ( "Pre: " + str(pre) + ", post: " + str(post) +", ratio: " + str(float(pre - post) / pre))
     print
     path = sanity.normalize(path, N)
 
