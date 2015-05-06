@@ -5,10 +5,10 @@ import sys
 
 ninstances = 495
 def main(argv):
-  fanswer = open("answer.out", "r")
+  fanswer = open("answer2.out", "r")
   fout = open("score.txt", "w")
   for i in xrange(ninstances):
-    finstance = open(`i+1`+".in", "r")
+    finstance = open("instances/"+`i+1`+".in", "r")
     N = int(finstance.readline())
     d = [[] for i in range(N)]
     for i in xrange(N):
@@ -25,13 +25,13 @@ def main(argv):
 
 def processCase(N, d, c, perm):
   if len(perm) != N:
-    return "-1"
+    return "LENGTH"
   v = [0] * N
   prev = 'X'
   count = 0
   for i in xrange(N):
     if v[perm[i]-1] == 1: 
-      return "-1"
+      return "DUPLICATE"
     v[perm[i]-1] = 1
 
     cur = c[perm[i]-1]
@@ -42,7 +42,7 @@ def processCase(N, d, c, perm):
       count = 1
 
     if count > 3:
-      return "-1"
+      return "COLOR:" + str(i)
 
   cost = 0
   for i in xrange(N-1):

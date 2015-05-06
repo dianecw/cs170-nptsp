@@ -7,7 +7,7 @@ import improvement
 
 """     Runs construct i times and takes the best construction.
 """
-def find_good_construction(edges, colors, N, selection_method=construction.randomly_select, i=10):
+def find_good_construction(edges, colors, N, selection_method=construction.randomly_select, i=1):
     best = None
     best_val = float('inf')
     for _ in range(i):
@@ -52,7 +52,7 @@ def construct(edges, colors, N, selection_method=construction.randomly_select):
 """     Improves the path using Lyn-Kernigan in addition with a form of annealing.
         We anneal r times and k-opt i times.
 """     
-def improve(path, edges, colors, r=10, i=100):
+def improve(path, edges, colors, r=1, i=10):
     best_path = path
     best_score = sanity.weight(path, edges)
     curr_path = path
