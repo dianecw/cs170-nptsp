@@ -27,7 +27,7 @@ def solve(edges, color, N):
 def normalize(assign, N):
 	new = [-1] * N
 	for i in range(N):
-		new[i] = assign[i] + 1
+		new[i] = assign[i]+1
 
 	return new
 
