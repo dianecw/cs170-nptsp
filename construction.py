@@ -28,17 +28,19 @@ def supreme_farthest_insertion(N, non_used_verticies, used_vertices, edges):
 def color_valid(index, path, colors, my_color):
 
     after_one = (index > len(path) - 1) or (my_color != colors[path[index]])
-    after_two = (index + 1 > len(path) - 1) or (
-        my_color != colors[path[index + 1]])
-    after = after_one or after_two
+    after_two = (index + 1 > len(path) - 1) or (my_color != colors[path[index + 1]])
+    after_three = (index + 2 > len(path) - 1) or (my_color != colors[path[index + 2]])
+    after = after_one or after_two or after_three
 
     before_one = (index - 1 < 0) or (my_color != colors[path[index - 1]])
     before_two = (index - 2 < 0) or (my_color != colors[path[index - 2]])
-    before = before_one or before_two
+    before_three = (index - 3 < 0) or (my_color != colors[path[index - 3]])
+    before = before_one or before_two or before_three
 
-    between = after_one or before_one
+    between1 = after_one or before_one or after_two
+    between2 = after_one or before_one or before_two
 
-    return after and before and between
+    return after and before and between1 and between2
 
 
 def edge_difference(index, path, edges, v_edges):
