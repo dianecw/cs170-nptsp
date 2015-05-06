@@ -7,7 +7,7 @@ import improvement
 
 """     Runs construct i times and takes the best construction.
 """
-def find_good_construction(edges, colors, N, selection_method=construction.randomly_select, i=10000):
+def find_good_construction(edges, colors, N, selection_method=construction.randomly_select, i=100):
     best = None
     best_val = float('inf')
     for _ in range(i):
