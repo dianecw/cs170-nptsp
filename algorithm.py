@@ -52,7 +52,7 @@ def construct(edges, colors, N, selection_method=construction.randomly_select):
 """     Improves the path using Lyn-Kernigan in addition with a form of annealing.
         We anneal r times and k-opt i times.
 """     
-def improve(path, edges, colors, r=10, i=1000):
+def improve(path, edges, colors, r=10, i=100):
     best_path = path
     best_score = sanity.weight(path, edges)
     curr_path = path
