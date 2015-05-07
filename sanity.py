@@ -1,6 +1,8 @@
 import itertools
 
 def is_valid_path(path, colors, print_path = True):
+    if path is None:
+        return False
     c = []
     for i in range(len(path)-3):
         

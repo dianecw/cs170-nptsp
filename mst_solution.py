@@ -1,6 +1,7 @@
 import algorithm
 import sanity
 import supreme_mst
+import construction
 
 T = 495 # number of test cases
 
@@ -34,18 +35,25 @@ for t in range(1, T+1):
 
     else:
 
-        path = old_sol
-        path = algorithm.improve(path, d, c, 10, 100)
-        # path = algorithm.targeted_improve(path, d, c, 500)
+        print ("*** TRIAL " + str(t) + " ***")
+        print old_score
+
+        new_edges = supreme_mst.mst_solver(d, N)
+        path = algorithm.find_good_construction(new_edges, c, N, selection_method=construction.domain_randomly_select)  
+        print sanity.weight(path, new_edges)
+        path = algorithm.targeted_improve(path, new_edges, c, 500)  
+        print sanity.weight(path, new_edges)
+        path = algorithm.improve(path, new_edges, c, 1, 100)
+        print sanity.weight(path, new_edges)
         # path = algorithm.improve(path, d, c, 2, 20)
         post = sanity.weight(path, d)
 
 
-        print ("*** TRIAL " + str(t) + " ***")
-        print ("NEW: " + str(post))
-        print ("OLD: " + str(old_score))
-        print ("IMPROVEMENT: " + str(old_score-post))
-        print ("")
+        if post < old_score:
+            print ("NEW: " + str(post))
+            print ("OLD: " + str(old_score))
+            print ("IMPROVEMENT: " + str(old_score-post))
+            print ("")
 
 
         if len(old_sol) > 0 and old_score < post:

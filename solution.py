@@ -1,4 +1,3 @@
-import naive_solution
 import algorithm
 import sanity
 import supreme_mst
@@ -36,9 +35,11 @@ for t in range(1, T+1):
 
     else:
 
-        path = algorithm.find_good_construction(d, c, N)    
+        path = algorithm.find_good_construction(d, c, N, i=10000)    
         pre = sanity.weight(path,d)
-        path = algorithm.improve(path, d, c)
+        print pre
+        path = algorithm.improve(path, d, c, 10, 1000)
+        print post
         post = sanity.weight(path, d)
 
 

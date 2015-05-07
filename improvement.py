@@ -28,6 +28,39 @@ def super_kopt(edges, colors, path, k):
             path = None
     return optimal_path
 
+def targeted_k_opt(edges, colors, path, k):
+
+    biggest_edge = None
+    biggest_edge_length = -1
+    for i in range(1, len(path)):
+        if edges[i-1][i] > biggest_edge_length:
+            biggest_edge_length = edges[i-1][i]
+            biggest_edge = i
+    N = len(path)
+    random_edges = random.sample(range(0, N), k - 2) + [N, biggest_edge]
+    random_edges = sorted(random_edges)
+    start = 0
+    subpaths = []
+    for i in range(k):
+        subpaths.append(path[start:random_edges[i]])
+        start = random_edges[i]
+    subpaths = list(filter(lambda x :len(x) > 0, subpaths))
+    permutations = itertools.permutations(subpaths)
+    optimal = sanity.weight(path,edges)
+    optimal_path = path 
+    path = next(permutations)
+    while path != None:
+        path = [item for sublist in path for item in sublist]
+        weight = sanity.weight(path,edges)
+        if optimal > weight and sanity.is_valid_path(path,colors, False):
+            optimal = weight
+            optimal_path = path
+        try:
+            path = next(permutations)
+        except StopIteration:
+            path = None
+    return optimal_path
+
 
 def random_kopt(edges, colors, path, k):
     N = len(path)
@@ -59,7 +92,7 @@ def random_kopt(edges, colors, path, k):
 
 
 def super_kopt_helper(edges, colors, path, i, results):
-    results[i-4] = super_kopt(edges, colors, path, i)
+    results[i-4] = super_kopt(edges, colors, path, i-1)
 
 
 def lin_kernigan_iteration(path, edges, colors):

@@ -1,6 +1,7 @@
 import algorithm
 import sanity
 import supreme_mst
+import greedy
 
 T = 495 # number of test cases
 
@@ -23,34 +24,33 @@ for t in range(1, T+1):
 
     # find an answer, and put into assign
 
-    if t%50 == 0:
-        print ("*** DIVISION " + str(t) + " ***")
+
+
+    print ("*** TRIAL " + str(t) + " ***")
 
     old_sol = sanity.denormalize(old_solutions[t-1], N)
     old_score = sanity.weight(old_sol,d)
 
-    if old_score == 0 or len(old_sol) < 7:
+    if old_score == 0:
         path = old_sol
 
     else:
 
-        path = old_sol
-        path = algorithm.improve(path, d, c, 10, 100)
-        # path = algorithm.targeted_improve(path, d, c, 500)
-        # path = algorithm.improve(path, d, c, 2, 20)
-        post = sanity.weight(path, d)
+        path = greedy.good_greedy(d, c, N)
+        if path is not None and sanity.is_valid_path(path, c):
+            post = sanity.weight(path, d)
+            if post < old_score:
+                print ("NEW: " + str(post))
+                print ("OLD: " + str(old_score))
+                print ("IMPROVEMENT: " + str(old_score-post))
+                print ("")
 
 
-        print ("*** TRIAL " + str(t) + " ***")
-        print ("NEW: " + str(post))
-        print ("OLD: " + str(old_score))
-        print ("IMPROVEMENT: " + str(old_score-post))
-        print ("")
-
-
-        if len(old_sol) > 0 and old_score < post:
+            if len(old_sol) > 0 and sanity.weight(old_sol,d) < post:
+                path = old_sol
+                post = sanity.weight(old_sol,d)
+        else:
             path = old_sol
-            post = sanity.weight(old_sol,d)
 
 
     path = sanity.normalize(path, N)

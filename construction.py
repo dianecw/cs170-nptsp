@@ -3,15 +3,24 @@ import sanity
 import threading
 import random
 
-def randomly_select(N, not_used_vertices, used_vertices, edges):
-    num = random.randint(0, N - 1)
-    if num in not_used_vertices:
-        return num
-    else:
-        return randomly_select(N, not_used_vertices, used_vertices, edges)
+def randomly_select(N, not_used_vertices, used_vertices, edges, path):
+    return random.choice(list(not_used_vertices))
 
+def domain_randomly_select(N, not_used_vertices,used_vertices, edges, path):
+    domain = set()
+    seen = []
+    for i in used_vertices:
+        for j in range(N):
+            num = edges[i][j]
+            if num <= 100 and not j in used_vertices:
+                if j in seen or len(used_vertices) == 1 or i == path[0] or i == path[-1]:
+                    domain.add(j)
+                seen.append(j)
+    if len(domain) == 0:
+        return False
+    return random.choice(list(domain))
 
-def supreme_farthest_insertion(N, non_used_verticies, used_vertices, edges):
+def supreme_farthest_insertion(N, non_used_verticies, used_vertices, edges, path):
     best = None
     best_val = float('-inf')
     for v in non_used_verticies:
