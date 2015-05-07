@@ -57,8 +57,8 @@ def construct(edges, colors, N, selection_method=construction.randomly_select):
 
 
 
-"""     Improves the path using Lyn-Kernigan in addition with a form of annealing.
-        We anneal r times and k-opt i times.
+""" Improves the path using Lyn-Kernigan in addition with a form of annealing.
+    We anneal r times and k-opt i times.
 """     
 def improve(path, edges, colors, r=100, i=100):
     best_path = path
@@ -75,7 +75,9 @@ def improve(path, edges, colors, r=100, i=100):
 
     return best_path
 
-
+""" Runs targeted_k_opt which pruposely breaks some of the heaviest edges
+    in an effort to improve the efficiency.  
+"""
 def targeted_improve(path, edges, colors, i=100):
     best_path = path
     best_score = sanity.weight(path, edges)

@@ -3,6 +3,9 @@ import itertools
 import sanity
 import threading
 
+""" Regular k-opt, finds k random edges, breaks them, and recombines them into 
+    the best permutation possible.
+"""
 def super_kopt(edges, colors, path, k):
     N = len(path)
     random_edges = sorted(random.sample(range(0, N), k)) + [N]
@@ -28,6 +31,8 @@ def super_kopt(edges, colors, path, k):
             path = None
     return optimal_path
 
+""" Purposely targest the heaviest edges in the graph to break and recombine.
+"""
 def targeted_k_opt(edges, colors, path, k):
 
     biggest_edge = None
@@ -61,7 +66,9 @@ def targeted_k_opt(edges, colors, path, k):
             path = None
     return optimal_path
 
-
+""" For purposes of annealing.  Randomly chooses a permutation with no regard
+    to how good or bad it is.
+"""
 def random_kopt(edges, colors, path, k):
     N = len(path)
     random_edges = sorted(random.sample(range(0, N), k)) + [N]
@@ -127,11 +134,13 @@ def somewhat_random_super_kopt(edges, colors, path, k):
         rand = random.randint(0,len(path_list)-1)
         return path_list[rand]
 
-
+"""Runs super_kopt and stores it into results
+"""
 def super_kopt_helper(edges, colors, path, i, results):
     results[i-4] = super_kopt(edges, colors, path, i)
 
-
+""" LK iterations.  Threaded for performance improvement.  
+"""
 def lin_kernigan_iteration(path, edges, colors):
     results = [None for _ in range(2)]
     threads = []
@@ -152,7 +161,8 @@ def lin_kernigan_iteration(path, edges, colors):
     else:
         return k_is_four
 
-
+""" Runs LK i times.
+"""
 def lin_kernigan_total(path, edges, colors, i=1000):
     for _ in range(i):
         path = lin_kernigan_iteration(path, edges, colors)
