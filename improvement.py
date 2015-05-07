@@ -5,10 +5,10 @@ import threading
 
 def super_kopt(edges, colors, path, k):
     N = len(path)
-    random_edges = sorted(random.sample(range(0, N), k - 1)) + [N]
+    random_edges = sorted(random.sample(range(0, N), k)) + [N]
     start = 0
     subpaths = []
-    for i in range(k):
+    for i in range(k+1):
         subpaths.append(path[start:random_edges[i]])
         start = random_edges[i]
     subpaths = list(filter(lambda x :len(x) > 0, subpaths))
@@ -64,10 +64,47 @@ def targeted_k_opt(edges, colors, path, k):
 
 def random_kopt(edges, colors, path, k):
     N = len(path)
-    random_edges = sorted(random.sample(range(0, N), k - 1)) + [N]
+    random_edges = sorted(random.sample(range(0, N), k)) + [N]
     start = 0
     subpaths = []
-    for i in range(k):
+    for i in range(k+1):
+        subpaths.append(path[start:random_edges[i]])
+        start = random_edges[i]
+    subpaths = list(filter(lambda x :len(x) > 0, subpaths))
+    permutations = itertools.permutations(subpaths)
+    path = next(permutations)
+    path_list = []
+    while path != None:
+        path = [item for sublist in path for item in sublist]
+        weight = sanity.weight(path,edges)
+        if sanity.is_valid_path(path,colors, False):
+            path_list = path_list + [path]
+        try:
+            path = next(permutations)
+        except StopIteration:
+            path = None
+
+    if len(path_list) == 0:
+        return random_kopt(edges, colors, path, k)
+    else:
+        rand = random.randint(0,len(path_list)-1)
+        return path_list[rand]
+
+def somewhat_random_super_kopt(edges, colors, path, k):
+    N = len(path)
+
+    max_edge, max_index = -1, -1
+    for i in range(len(path) - 1):
+        vertex, next = path[i], path[i+1]
+        weight = edges[vertex][next]
+        if weight > max_edge:
+            max_edge = weight
+            max_index = i
+
+    random_edges = sorted(random.sample(range(0, N), k-1) + [i] + [N])
+    start = 0
+    subpaths = []
+    for i in range(k+1):
         subpaths.append(path[start:random_edges[i]])
         start = random_edges[i]
     subpaths = list(filter(lambda x :len(x) > 0, subpaths))
@@ -92,12 +129,13 @@ def random_kopt(edges, colors, path, k):
 
 
 def super_kopt_helper(edges, colors, path, i, results):
-    results[i-4] = super_kopt(edges, colors, path, i-1)
+    results[i-4] = super_kopt(edges, colors, path, i)
 
 
 def lin_kernigan_iteration(path, edges, colors):
     results = [None for _ in range(2)]
     threads = []
+
     for i in range(4,6):
         t = threading.Thread(target=super_kopt_helper, args=(edges, colors, path, i, results))
         threads.append(t)
