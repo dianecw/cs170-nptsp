@@ -5,7 +5,7 @@ import sys
 
 ninstances = 495
 def main(argv):
-  fanswer = open("answer2.out", "r")
+  fanswer = open("answer.out", "r")
   fout = open("score.txt", "w")
   for i in xrange(ninstances):
     finstance = open("instances/"+`i+1`+".in", "r")

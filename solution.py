@@ -29,58 +29,28 @@ for t in range(1, T+1):
     print ("*** TRIAL " + str(t) + " ***")
 
     old_sol = sanity.denormalize(old_solutions[t-1], N)
-    print ("OLD: " + str(old_sol))
-    print ("SCORE: " + str(sanity.weight(old_sol,d)))
-    print ("")
+    old_score = sanity.weight(old_sol,d)
 
-
-
-    path = algorithm.find_good_construction(d, c, N)    
-    pre = sanity.weight(path,d)
-    path = algorithm.improve(path, d, c)
-    post = sanity.weight(path, d)
-    
-    print("VALID: " +  str(sanity.is_valid_path(path, c)))
-    print("PATH: " + str(path))
-    print("SCORE: " + str(post))
-    print("")
-
-
-    # naive_path = naive_solution.solve(d, c, N)
-    # print("NAIVE PATH: " + str(naive_path))
-    # print("VALID: " + str(sanity.is_valid_path(naive_path, c)))
-    # if sanity.is_valid_path(naive_path, c):
-    #     print("SCORE: " + str(sanity.weight(naive_path, d)))
-
-    # if sanity.is_valid_path(naive_path, c) and sanity.weight(naive_path, d) < post:
-    #     path = naive_path
-    #     post = sanity.weight(naive_path, d)
-    # print
-
-
-
-
-    # new_edges = supreme_mst.mst_solver(d, N, 10)
-    # print new_edges
-    # new_path = algorithm.find_good_construction(new_edges, c, N)
-    # new_path = algorithm.improve(new_path, new_edges, c)
-    # new_score = sanity.weight(new_path, new_edges)
-
-    # print "NEW PATH: " + str(new_path)
-    # print "VALID: " + str(sanity.is_valid_path(new_path, c))
-    # print "SCORE: " + str(new_score)
-    # print
-
-    # if new_score < post:
-    #     path = new_path
-    #     post = new_score
-
-
-
-    print("")
-    if len(old_sol) > 0 and sanity.weight(old_sol,d) < post:
+    if old_score == 0:
         path = old_sol
-        post = sanity.weight(old_sol,d)
+
+    else:
+
+        path = algorithm.find_good_construction(d, c, N)    
+        pre = sanity.weight(path,d)
+        path = algorithm.improve(path, d, c)
+        post = sanity.weight(path, d)
+
+
+        print ("NEW: " + str(post))
+        print ("OLD: " + str(old_score))
+        print ("IMPROVEMENT: " + str(old_score-post))
+        print ("")
+
+
+        if len(old_sol) > 0 and sanity.weight(old_sol,d) < post:
+            path = old_sol
+            post = sanity.weight(old_sol,d)
 
 
     path = sanity.normalize(path, N)

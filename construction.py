@@ -1,7 +1,7 @@
-import random
 import itertools
 import sanity
 import threading
+import random
 
 def randomly_select(N, not_used_vertices, used_vertices, edges):
     num = random.randint(0, N - 1)
