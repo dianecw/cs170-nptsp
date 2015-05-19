@@ -36,7 +36,7 @@ for t in range(1, T+1):
 
         path = old_sol
         path = algorithm.improve(path, d, c, 10, 100)
-        # path = algorithm.targeted_improve(path, d, c, 500)
+        path = algorithm.targeted_improve(path, d, c, 500)
         # path = algorithm.improve(path, d, c, 2, 20)
         post = sanity.weight(path, d)
 

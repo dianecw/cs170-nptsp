@@ -35,13 +35,12 @@ for t in range(1, T+1):
 
     else:
 
-        path = algorithm.find_good_construction(d, c, N, i=10000)    
+        path = algorithm.find_good_construction(d, c, N, i=1000)    
         pre = sanity.weight(path,d)
         print pre
-        path = algorithm.improve(path, d, c, 10, 1000)
-        print post
+        path = algorithm.improve(path, d, c, 10, 100)
         post = sanity.weight(path, d)
-
+        print post
 
         print ("NEW: " + str(post))
         print ("OLD: " + str(old_score))
